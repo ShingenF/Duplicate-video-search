@@ -1,0 +1,37 @@
+[package]
+name = "duplicate-video-search"
+version = "2.5.5"
+description = "Local-first duplicate and near-duplicate video scanner."
+authors = ["Local"]
+edition = "2021"
+default-run = "duplicate-video-search"
+
+[lib]
+name = "duplicate_video_search_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+anyhow = "1"
+hex = "0.4"
+ndarray = "0.17"
+ort = { version = "2.0.0-rc.12", features = ["directml"] }
+rusqlite = { version = "0.32", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+tauri = { version = "2", features = ["protocol-asset"] }
+thiserror = "2"
+walkdir = "2"
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.61", features = [
+    "Win32_Foundation",
+    "Win32_Storage_FileSystem",
+    "Win32_System_Registry",
+    "Win32_System_Threading",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+] }
