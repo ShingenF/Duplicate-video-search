@@ -1,0 +1,29 @@
+{
+  "name": "duplicate-video-search",
+  "version": "2.5.5",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:web": "vite --host 127.0.0.1 --port 1420",
+    "build:web": "tsc && vite build",
+    "tauri": "tauri",
+    "dev": "tauri dev",
+    "build": "tauri build --bundles nsis",
+    "build:exe": "tauri build --no-bundle",
+    "build:all": "tauri build"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.9.0",
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.9.0",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.7"
+  }
+}

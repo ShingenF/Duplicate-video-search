@@ -1,0 +1,19 @@
+* text=auto
+
+*.rs text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.css text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.toml text eol=lf
+*.cmd text eol=crlf
+
+*.png binary
+*.ico binary
+*.exe binary
+*.msi binary
+*.sqlite binary
+*.sqlite-shm binary
+*.sqlite-wal binary
+*.onnx binary
