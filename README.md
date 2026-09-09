@@ -6,6 +6,10 @@
 
 ## 中文
 
+![中文筛选界面示意图](docs/images/filter-ui-zh.png)
+
+*AI 生成的假想使用界面，所有文件名、缩略图和数据均为虚构；不是实际运行截图，具体界面以软件为准。*
+
 Duplicate Video Search 是一个本地视频查重工具，用来整理电脑或 SMB 共享中的重复视频、相似转码和疑似剪辑片段。使用 React + Tauri + Rust，AI 推理在本机完成。
 
 **当前源码版本：2.5.5。支持 Windows x64；本仓库提供源码，不附带模型、FFmpeg 或预编译安装包。**
@@ -115,6 +119,10 @@ CLI 使用同一套设置和索引；启用内存盘时，包括 `status` 在内
 ---
 
 ## English
+
+![Illustrative video filtering interface in English](docs/images/filter-ui-en.png)
+
+*AI-generated concept illustration with fictional filenames, thumbnails, and data. This is not an actual application screenshot; the shipped interface may differ.*
 
 Duplicate Video Search is a local video deduplication tool for Windows and accessible SMB shares. It uses React, Tauri, Rust, SQLite, and local ONNX inference to find duplicates, alternate encodes, and possible clips.
 
