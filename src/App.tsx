@@ -1174,6 +1174,7 @@ export default function App() {
 
   const settingsLanguage = normalizeSettingsLanguage(settingsDraft?.uiLanguage ?? settings?.uiLanguage);
   const settingText = SETTINGS_TEXT[settingsLanguage];
+  const matchText = (zh: string, en: string) => settingsLanguage === "en" ? en : zh;
   const settingsDirty = useMemo(
     () => Boolean(settings && settingsDraft && JSON.stringify(settings) !== JSON.stringify(settingsDraft)),
     [settings, settingsDraft],
@@ -2019,7 +2020,7 @@ export default function App() {
         setSettingsDraft(saved);
       }
       await refreshAll(scopeSessionIds, nextMinConfidence, nextMaxConfidence);
-      setNotice("相似结果已刷新");
+      setNotice(matchText("相似结果已刷新", "Matches refreshed"));
     } catch (error) {
       setNotice(String(error));
     }
@@ -3653,17 +3654,17 @@ export default function App() {
           >
             <div className="group-list">
               <div className="section-title">
-                <span>相似结果</span>
+                <span>{matchText("相似结果", "Matches")}</span>
                 <div className="section-actions">
                   <small>{groups.length} groups</small>
                   <button
                     className="tiny-button"
                     onClick={refreshMatches}
                     disabled={isScanning || isExecuting || Boolean(refreshProgress)}
-                    title="重新读取索引并刷新相似结果"
+                    title={matchText("重新读取索引并刷新相似结果", "Reload the index and refresh matches")}
                   >
                     <RefreshCw size={13} />
-                    刷新
+                    {matchText("刷新", "Refresh")}
                   </button>
                 </div>
               </div>
@@ -3675,17 +3676,17 @@ export default function App() {
                   aria-controls="match-filter-fields"
                   onClick={() => setMatchFiltersExpanded((value) => !value)}
                 >
-                  <span>筛选与匹配</span>
+                  <span>{matchText("筛选与匹配", "Filters & matching")}</span>
                   <small>
                     {Math.round(Number(minConfidenceText) || 0)}–{Math.round(Number(maxConfidenceText) || 0)}%
-                    · AI {Math.round(Number(aiMatchThresholdText) || 0)}% · {normalizedAiMinMatchedFrames()} 帧
+                    · AI {Math.round(Number(aiMatchThresholdText) || 0)}% · {normalizedAiMinMatchedFrames()} {matchText("帧", "frames")}
                   </small>
                   {matchFiltersExpanded ? <ChevronDown size={15} /> : <ChevronRight size={15} />}
                 </button>
                 {matchFiltersExpanded && (
                   <div className="match-controls" id="match-filter-fields">
                     <label>
-                      <span>最低相似度</span>
+                      <span>{matchText("最低相似度", "Min similarity")}</span>
                       <div className="percent-input">
                         <input
                           type="number"
@@ -3706,7 +3707,7 @@ export default function App() {
                       </div>
                     </label>
                     <label>
-                      <span>最高相似度</span>
+                      <span>{matchText("最高相似度", "Max similarity")}</span>
                       <div className="percent-input">
                         <input
                           type="number"
@@ -3727,7 +3728,7 @@ export default function App() {
                       </div>
                     </label>
                     <label>
-                      <span>AI 识别阈值</span>
+                      <span>{matchText("AI 识别阈值", "AI threshold")}</span>
                       <div className="percent-input">
                         <input
                           type="number"
@@ -3747,7 +3748,7 @@ export default function App() {
                       </div>
                     </label>
                     <label>
-                      <span>最低匹配帧数</span>
+                      <span>{matchText("最低匹配帧数", "Min matched frames")}</span>
                       <input
                         type="number"
                         min={1}
@@ -3762,21 +3763,21 @@ export default function App() {
                       />
                     </label>
                     <label>
-                      <span>排序</span>
+                      <span>{matchText("排序", "Sort by")}</span>
                       <select
                         value={groupSort}
                         onChange={(event) => setGroupSort(event.target.value as GroupSort)}
                       >
-                        <option value="reclaimable">可释放</option>
-                        <option value="confidence">相似度</option>
-                        <option value="files">文件数</option>
+                        <option value="reclaimable">{matchText("可释放", "Reclaimable")}</option>
+                        <option value="confidence">{matchText("相似度", "Similarity")}</option>
+                        <option value="files">{matchText("文件数", "File count")}</option>
                       </select>
                     </label>
                   </div>
                 )}
               </div>
               <div className="batch-actions">
-                <span>{batchGroupIds.length} 组已勾选</span>
+                <span>{batchGroupIds.length} {matchText("组已勾选", "selected")}</span>
                 <div className="batch-replace-control">
                   <button
                     className={batchDisposal === "delete" ? "mini-danger" : "mini-button"}
@@ -3788,12 +3789,12 @@ export default function App() {
                     }
                     title={
                       batchDisposal === "delete" && !settings?.allowDirectDelete
-                        ? "在 Settings 中启用仅删除"
+                        ? matchText("在 Settings 中启用仅删除", "Enable direct deletion in Settings")
                         : undefined
                     }
                   >
                     <ArrowRightLeft size={15} />
-                    批量替换
+                    {matchText("批量替换", "Batch replace")}
                   </button>
                   <button
                     className={`batch-mode-toggle ${batchDisposal === "delete" ? "danger" : ""}`}
@@ -3802,26 +3803,26 @@ export default function App() {
                       setBatchDisposal((value) => (value === "backup" ? "delete" : "backup"))
                     }
                     disabled={isExecuting}
-                    title="切换替换后原文件的处理方式"
+                    title={matchText("切换替换后原文件的处理方式", "Choose how to handle replaced originals")}
                   >
                     {batchDisposal === "backup" ? <Archive size={14} /> : <Trash2 size={14} />}
-                    {batchDisposal === "backup" ? "备份" : "删除"}
+                    {batchDisposal === "backup" ? matchText("备份", "Back up") : matchText("删除", "Delete")}
                   </button>
                 </div>
               </div>
               <div className="group-list-header-row">
                 <CandidateToggle
                   checked={allVisibleGroupsQueued}
-                  label={allVisibleGroupsQueued ? "取消全选" : "全选"}
+                  label={allVisibleGroupsQueued ? matchText("取消全选", "Deselect all") : matchText("全选", "Select all")}
                   compact
                   disabled={visibleGroupIds.length === 0}
                   onClick={() => setAllVisibleGroups(!allVisibleGroupsQueued)}
                 />
-                <span>相似组</span>
-                <span>相似度</span>
+                <span>{matchText("相似组", "Similar groups")}</span>
+                <span>{matchText("相似度", "Similarity")}</span>
               </div>
               {groups.length === 0 ? (
-                <div className="empty-state">暂无相似组</div>
+                <div className="empty-state">{matchText("暂无相似组", "No similar groups")}</div>
               ) : (
                 <div className="group-scroll" onKeyDown={handleGroupListKeyDown}>
                   {displayedGroups.map((group) => {
@@ -3861,7 +3862,7 @@ export default function App() {
                       >
                         <CandidateToggle
                           checked={isBatchSelected}
-                          label="加入批量替换队列"
+                          label={matchText("加入批量替换队列", "Add to batch queue")}
                           compact
                           onClick={() => toggleBatchGroup(group)}
                         />
@@ -3881,7 +3882,7 @@ export default function App() {
               )}
             </div>
 
-            <div className="splitter" onPointerDown={beginResize} title="拖动调整相似结果宽度">
+            <div className="splitter" onPointerDown={beginResize} title={matchText("拖动调整相似结果宽度", "Drag to resize the results list")}>
               <GripVertical size={16} />
             </div>
 
@@ -3895,7 +3896,7 @@ export default function App() {
                     </div>
                     <button className="secondary-button" onClick={copyReport}>
                       <Clipboard size={18} />
-                      复制报告
+                      {matchText("复制报告", "Copy report")}
                     </button>
                   </div>
 
@@ -3912,14 +3913,14 @@ export default function App() {
                       disabled={currentGroupVideoIds.length === 0}
                     >
                       {allCurrentGroupVideosSelected ? <CheckSquare size={15} /> : <Square size={15} />}
-                      {allCurrentGroupVideosSelected ? "取消全选" : "全选候选"}
+                      {allCurrentGroupVideosSelected ? matchText("取消全选", "Deselect all") : matchText("全选候选", "Select candidates")}
                     </button>
                     <button
                       className="mini-button"
                       onClick={() => setSelectedVideoIds([])}
                       disabled={selectedVideoIds.length === 0}
                     >
-                      清空选择
+                      {matchText("清空选择", "Clear selection")}
                     </button>
                   </div>
 
@@ -3955,20 +3956,20 @@ export default function App() {
                         >
                           <CandidateToggle
                             checked={isChecked}
-                            label="选择"
+                            label={matchText("选择", "Select")}
                             onClick={() => toggleVideo(item.video)}
                           />
                           <PreviewStrip video={item.video} />
                           <div className="video-card-body">
                             <div className="video-card-head">
                               <div className="role-stack">
-                                {isKeeper && <span className="role keep">推荐保留</span>}
-                                {isNamingSource && <span className="role inherit">推荐继承路径自</span>}
-                                {isFilenameSource && <span className="role inherit">当前文件名源</span>}
+                                {isKeeper && <span className="role keep">{matchText("推荐保留", "Keep")}</span>}
+                                {isNamingSource && <span className="role inherit">{matchText("推荐继承路径自", "Path source")}</span>}
+                                {isFilenameSource && <span className="role inherit">{matchText("当前文件名源", "Filename source")}</span>}
                                 {!isKeeper && !isNamingSource && !isFilenameSource && (
                                   <span className="role">
                                     {item.video.id === selectedGroup.recommendedVideoId
-                                      ? "原推荐保留"
+                                      ? matchText("原推荐保留", "Previously recommended")
                                       : item.role}
                                   </span>
                                 )}
@@ -3982,7 +3983,7 @@ export default function App() {
                                       setKeeper(selectedGroup, item);
                                     }}
                                   >
-                                    设为保留
+                                    {matchText("设为保留", "Keep this")}
                                   </button>
                                 )}
                                 <button
@@ -3993,7 +3994,7 @@ export default function App() {
                                   }}
                                   disabled={isNamingSource}
                                 >
-                                  {isNamingSource ? "当前路径源" : "设为路径源"}
+                                  {isNamingSource ? matchText("当前路径源", "Current path source") : matchText("设为路径源", "Use path")}
                                 </button>
                                 <button
                                   className={`mini-button ${isFilenameSource ? "active" : ""}`}
@@ -4003,7 +4004,7 @@ export default function App() {
                                   }}
                                   disabled={isFilenameSource}
                                 >
-                                  {isFilenameSource ? "当前文件名" : "只保留文件名"}
+                                  {isFilenameSource ? matchText("当前文件名", "Current filename") : matchText("只保留文件名", "Use filename")}
                                 </button>
                                 <button
                                   className="mini-button"
@@ -4012,11 +4013,11 @@ export default function App() {
                                     temporarilyIgnoreVideo(item);
                                   }}
                                 >
-                                  暂时不修改
+                                  {matchText("暂时不修改", "Skip for now")}
                                 </button>
                                 <button className="icon-text-button" onClick={() => handleOpenVideo(item.video)}>
                                   <Play size={16} />
-                                  播放
+                                  {matchText("播放", "Play")}
                                 </button>
                               </div>
                             </div>
@@ -4037,21 +4038,21 @@ export default function App() {
                       disabled={selectedVideoIds.length < 2 || isExecuting}
                     >
                       <Archive size={18} />
-                      并入并备份
+                      {matchText("并入并备份", "Merge & back up")}
                     </button>
                     <button
                       className="danger-button"
                       onClick={() => handleSelectedResolution("delete")}
                       disabled={selectedVideoIds.length < 2 || !settings?.allowDirectDelete || isExecuting}
-                      title={!settings?.allowDirectDelete ? "在 Settings 中启用仅删除" : undefined}
+                      title={!settings?.allowDirectDelete ? matchText("在 Settings 中启用仅删除", "Enable direct deletion in Settings") : undefined}
                     >
                       <ArrowRightLeft size={18} />
-                      并入并删除
+                      {matchText("并入并删除", "Merge & delete")}
                     </button>
                   </div>
                 </>
               ) : (
-                <div className="empty-state">等待扫描结果</div>
+                <div className="empty-state">{matchText("等待扫描结果", "Waiting for scan results")}</div>
               )}
             </div>
           </section>
